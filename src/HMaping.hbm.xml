@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.arm.model.Museo" table="museum">
+        <id name="mus_id" column="Mus_id" type="java.lang.String"/>
+        <property name="mus_place_id" column="Mus_place_id" type="java.lang.String"/>
+        <property name="mus_nombre" column="Mus_Name" type="java.lang.String"/>
+        <property name="mus_rating" column="Mus_Rating" type="java.lang.String"/>
+        <property name="mus_scope" column="Mus_Scope" type="java.lang.String"/>
+        <property name="mus_phone_number" column="Mus_Phone_Number" type="java.lang.String"/>
+        <property name="mus_icon" column="Mus_Icon" type="java.lang.String"/>
+        <property name="mus_weekday_text" column="Mus_Weekday_Text" type="java.lang.String"/>
+        <property name="mus_website" column="Mus_Website" type="java.lang.String"/>
+    </class>
+</hibernate-mapping>
