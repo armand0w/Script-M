@@ -1,26 +1,24 @@
 package com.arm.museos;
 
-import com.arm.controller.MuseoControl;
 import com.arm.model.Direccion;
 import com.arm.model.Museo;
+import com.arm.util.Utilities;
+import com.arm.util.WSConsumer;
 import com.jayway.jsonpath.JsonPath;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 
 /**
  * Created by ACsatillo on 11/02/2016.
  */
-public class MuseosDB {
+public class MuseosCDMX {
 
     private static String key = "AIzaSyBXkD485Luv8zOVWRVTGXFv0eLGsBNtQhQ";
     private static String urlPlaces = "http://localhost/museums/places.json";
     private static String urlPlaceById = "http://localhost/museums/place_id.json";
 
     public static void main(String[] args){
-        String json = consumeURL( urlPlaces );
+        String json = WSConsumer.consumeURL(urlPlaces);
         if( JsonPath.read(json, "$.status").equals("OK") ) {
             JSONArray ja = JsonPath.read(json, "$.results");
             if( ja.size()>0 ){
@@ -28,7 +26,7 @@ public class MuseosDB {
                 for(int i=0; i<ja.size(); i++) {
                     String id = JsonPath.read(ja.get(i), "$.place_id");
                     if( id.length()>0 && id.length()<28 ){
-                        String jsid = consumeURL( urlPlaceById );
+                        String jsid = WSConsumer.consumeURL(urlPlaceById);
                         if( JsonPath.read(jsid, "$.status").equals("OK") ){
                             JSONObject place = JsonPath.read(jsid, "$.result");
                             try {
@@ -58,47 +56,22 @@ public class MuseosDB {
                                                 JsonPath.read(place, "$.url")  //maps_url
                                         )
                                 );
+                                //arreglar Mus_weekday_text
                                 museo.setMus_weekday_text( museo.getMus_weekday_text().substring(1, museo.getMus_weekday_text().length()-1).replaceAll("\"", "").replaceAll("\u2013", "-") );
+                                //Guardar json
+                                Utilities.saveDocument( jsid, museo.getMus_place_id() + "_-_" + museo.getMus_nombre() + ".json"  );
                             } catch (Exception e){
                                 System.err.println("Ocurrio algo mal al generar Museo : " + e.getLocalizedMessage());
                             }
 
-                            MuseoControl mc = new MuseoControl(museo);
-                            System.out.println( mc.save() );
+                            //MuseoControl mc = new MuseoControl(museo);
+                            //System.out.println( mc.save() );
 
                         } else System.err.println("No se encontro lugar con id : " + id + "\nUrl : " + urlPlaceById);
                     } else System.err.println("Algo raro en id : " + id);
                 }
             } else System.err.println("No se encontro resultados con : " + urlPlaces);
         } else System.err.println("Ocurrio error al consumir WS : " + urlPlaces);
-    }
-
-    protected static String consumeURL(String url){
-        String ret = "";
-        WebResource webResource = null;
-        ClientResponse response = null;
-        Client client = null;
-
-        try {
-            client = Client.create();
-            webResource = client.resource(url);
-            response = webResource
-                    .header("Content-Type", "application/json;charset=UTF-8")
-                    .get(ClientResponse.class);
-        } catch (Exception ex){
-            System.err.println("Error : " + ex.getMessage());
-        }
-
-        if(response!=null) {
-            if (response.getStatus() == ClientResponse.Status.OK.getStatusCode()) { //200
-                ret = response.getEntity(String.class);
-            } else {
-                System.err.println(response.toString());
-                ret = "";
-            }
-        }
-
-        return ret;
     }
 
 }
