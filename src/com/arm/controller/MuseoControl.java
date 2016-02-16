@@ -43,7 +43,8 @@ public class MuseoControl implements Controller{
             session.getTransaction().commit();
             ret = "{ \"mensaje\" : \""+this.museo.getMus_nombre()+" guardado con exito\"}";
             DirecControl dir = new DirecControl(this.museo.getDireccion());
-            System.out.println(dir.save());
+            System.out.println( dir.save() );
+            dir.close();
         } else ret = "{ \"mensaje\" : \""+this.museo.getMus_nombre()+" ya existe\"}";
         return ret;
     }
@@ -66,5 +67,10 @@ public class MuseoControl implements Controller{
     @Override
     public String update() {
         return null;
+    }
+
+    @Override
+    public void close() {
+        session.close();
     }
 }

@@ -65,4 +65,9 @@ public class DirecControl implements Controller{
     public String update() {
         return null;
     }
+
+    @Override
+    public void close() {
+        session.close();
+    }
 }

@@ -9,6 +9,7 @@ import com.sun.jersey.api.client.WebResource;
  */
 public class WSConsumer {
     public static String consumeURL(String url){
+        System.out.println( url );
         String ret = "";
         WebResource webResource = null;
         ClientResponse response = null;
@@ -28,7 +29,7 @@ public class WSConsumer {
             if (response.getStatus() == ClientResponse.Status.OK.getStatusCode()) { //200
                 ret = response.getEntity(String.class);
             } else {
-                System.err.println(response.toString());
+                System.err.println("Error WS : " + response.toString());
                 ret = "";
             }
         }

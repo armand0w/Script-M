@@ -17,4 +17,6 @@ public interface Controller {
 
     String update();
 
+    void close();
+
 }

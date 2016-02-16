@@ -20,8 +20,7 @@ public class Utilities {
                 fw = new FileWriter(path+name);
                 pw = new PrintWriter(fw);
                 pw.print(doc);
-                System.out.println("Archivo Guardado");
-            } else System.out.println("El archivo ya existe");
+            }
         } catch ( IOException io){ System.err.println("Error al guardar archivo '" + name + "' = " + io.getLocalizedMessage()); }
         finally {
             try {
