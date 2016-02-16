@@ -9,6 +9,7 @@ import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
 import net.minidev.json.JSONArray;
 
+
 /**
  * Created by ACsatillo on 11/02/2016.
  */
@@ -88,7 +89,7 @@ public class MuseosCDMX {
             ret = JsonPath.read(json, path).toString();
         } catch (PathNotFoundException e){
             ret = "";
-            System.err.println("PathNotFoundException : " + path);
+            //System.err.println("PathNotFoundException : " + path);
             System.err.println("Error : " + e.getLocalizedMessage());
         }
         return ret;

@@ -19,8 +19,9 @@
         <!-- Enable Hibernate's automatic session context management -->
         <!--property name="current_session_context_class">thread</property-->
 
-    <!-- Echo all executed SQL to stdout -->
+        <!-- Echo all executed SQL to stdout -->
         <property name="show_sql">false</property>
+        <property name="generate_statistics">false</property>
 
         <!-- Maping Enti -->
         <mapping resource="HMapingMuseo.hbm.xml" />

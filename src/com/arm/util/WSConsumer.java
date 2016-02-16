@@ -9,7 +9,7 @@ import com.sun.jersey.api.client.WebResource;
  */
 public class WSConsumer {
     public static String consumeURL(String url){
-        System.out.println( url );
+        //System.out.println( url );
         String ret = "";
         WebResource webResource = null;
         ClientResponse response = null;
