@@ -22,7 +22,9 @@
         <!-- Echo all executed SQL to stdout -->
         <property name="show_sql">false</property>
 
-        <mapping resource="HMaping.hbm.xml" />
+        <!-- Maping Enti -->
+        <mapping resource="HMapingMuseo.hbm.xml" />
+        <mapping resource="HMapingDirection.hbn.xml"/>
     </session-factory>
 
 </hibernate-configuration>

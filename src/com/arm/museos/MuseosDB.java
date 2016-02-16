@@ -3,10 +3,6 @@ package com.arm.museos;
 import com.arm.controller.MuseoControl;
 import com.arm.model.Direccion;
 import com.arm.model.Museo;
-/*import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;*/
 import com.jayway.jsonpath.JsonPath;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;

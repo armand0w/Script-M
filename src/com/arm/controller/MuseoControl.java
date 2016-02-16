@@ -1,7 +1,6 @@
 package com.arm.controller;
 
 import com.arm.model.Museo;
-
 import com.arm.util.HSession;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -11,10 +10,9 @@ import org.hibernate.Session;
  */
 public class MuseoControl implements Controller{
     private Museo museo = null;
-    Session session = null;
+    private Session session = null;
 
     public Museo getMuseo() { return museo; }
-
     public void setMuseo(Museo museo) { this.museo = museo; }
 
     public MuseoControl(){
@@ -31,12 +29,9 @@ public class MuseoControl implements Controller{
     @Override
     public boolean exist() {
         boolean exist = false;
-
         Query q = session.createQuery("FROM Museo WHERE mus_id = :mus_id");
         q.setParameter("mus_id", this.museo.getMus_id());
-
         if( q.list().size() > 0 ) exist = true;
-
         return exist;
     }
 
@@ -47,6 +42,8 @@ public class MuseoControl implements Controller{
             session.save(this.museo);
             session.getTransaction().commit();
             ret = "{ \"mensaje\" : \""+this.museo.getMus_nombre()+" guardado con exito\"}";
+            DirecControl dir = new DirecControl(this.museo.getDireccion());
+            System.out.println(dir.save());
         } else ret = "{ \"mensaje\" : \""+this.museo.getMus_nombre()+" ya existe\"}";
         return ret;
     }

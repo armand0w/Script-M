@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.arm.model.Direccion" table="location">
+        <id name="ubn_mus_place_id" column="ubn_mus_place_id" type="java.lang.String"/>
+        <property name="ubn_latitud" column="ubn_lat" type="java.lang.String"/>
+        <property name="ubn_longitud" column="ubn_lng" type="java.lang.String"/>
+        <property name="ubn_calle" column="ubn_street" type="java.lang.String"/>
+        <property name="ubn_ciudad" column="ubn_ciudad" type="java.lang.String"/>
+        <property name="ubn_colonia" column="ubn_colonia" type="java.lang.String"/>
+        <property name="ubn_delegacion" column="ubn_delegacion" type="java.lang.String"/>
+        <property name="ubn_direccion" column="ubn_adress" type="java.lang.String"/>
+        <property name="ubn_vicinity" column="ubn_vicinity" type="java.lang.String"/>
+        <property name="ubn_estado" column="ubn_estado" type="java.lang.String"/>
+        <property name="ubn_pais" column="ubn_pais" type="java.lang.String"/>
+        <property name="ubn_cp" column="ubn_postal_code" type="java.lang.String"/>
+        <property name="ubn_maps_url" column="ubn_maps_url" type="java.lang.String"/>
+    </class>
+</hibernate-mapping>
