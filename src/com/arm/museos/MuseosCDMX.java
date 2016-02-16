@@ -1,5 +1,6 @@
 package com.arm.museos;
 
+import com.arm.controller.MuseoControl;
 import com.arm.model.Direccion;
 import com.arm.model.Museo;
 import com.arm.util.Utilities;
@@ -64,8 +65,8 @@ public class MuseosCDMX {
                                 System.err.println("Ocurrio algo mal al generar Museo : " + e.getLocalizedMessage());
                             }
 
-                            //MuseoControl mc = new MuseoControl(museo);
-                            //System.out.println( mc.save() );
+                            MuseoControl mc = new MuseoControl(museo);
+                            System.out.println( mc.save() );
 
                         } else System.err.println("No se encontro lugar con id : " + id + "\nUrl : " + urlPlaceById);
                     } else System.err.println("Algo raro en id : " + id);
