@@ -30,7 +30,7 @@ public class MuseosCDMX {
             JSONArray ja = JsonPath.read(json, "$.results");
             if( ja.size()>0 ){
                 Museo museo = null;
-                for(int i=0; i<ja.size(); i++) {
+                for(int i=160; i<ja.size(); i++) {
                     String id = JsonPath.read(ja.get(i), "$.place_id");
                     if( id.length()>0 && id.length()<28 ){
                         String jsid = WSConsumer.consumeURL(urlPlaceById + id);
@@ -90,7 +90,10 @@ public class MuseosCDMX {
         } catch (PathNotFoundException e){
             ret = "";
             //System.err.println("PathNotFoundException : " + path);
-            System.err.println("Error : " + e.getLocalizedMessage());
+            System.err.println("Error : " + path);
+        } catch (NullPointerException nul){
+            ret = "";
+            //System.err.println("Null : " + nul.getLocalizedMessage());
         }
         return ret;
     }
