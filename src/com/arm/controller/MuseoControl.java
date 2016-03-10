@@ -4,6 +4,7 @@ import com.arm.model.Museo;
 import com.arm.util.HSession;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.exception.DataException;
 
 /**
  * Created by ACsatillo on 15/02/2016.
@@ -39,12 +40,17 @@ public class MuseoControl implements Controller{
     public String save() {
         String ret = "";
         if( !exist() ) {
+            try {
             session.save(this.museo);
             session.getTransaction().commit();
             ret = "{ \"mensaje\" : \""+this.museo.getMus_nombre()+" guardado con exito\"}";
             DirecControl dir = new DirecControl(this.museo.getDireccion());
             System.out.println( dir.save() );
             dir.close();
+            } catch (DataException de){
+                System.err.println("HSQL : " + de.getLocalizedMessage());
+                System.err.println("Museo : " + this.museo.toString());
+            }
         } else ret = "{ \"mensaje\" : \""+this.museo.getMus_nombre()+" ya existe\"}";
         return ret;
     }

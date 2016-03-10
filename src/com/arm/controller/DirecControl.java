@@ -4,6 +4,7 @@ import com.arm.model.Direccion;
 import com.arm.util.HSession;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.exception.DataException;
 
 /**
  * Created by ACsatillo on 15/02/2016.
@@ -39,9 +40,14 @@ public class DirecControl implements Controller{
     public String save() {
         String ret = "";
         if( !exist() ) {
-            session.save(this.direccion);
-            session.getTransaction().commit();
-            ret = "{ \"mensaje\" : \""+this.direccion.getUbn_mus_place_id()+" guardado con exito\"}";
+            try {
+                session.save(this.direccion);
+                session.getTransaction().commit();
+                ret = "{ \"mensaje\" : \"" + this.direccion.getUbn_mus_place_id() + " guardado con exito\"}";
+            } catch (DataException de){
+                System.err.println("HSQL : " + de.getLocalizedMessage());
+                System.err.println("Direccion : " + this.direccion.toString());
+            }
         } else ret = "{ \"mensaje\" : \""+this.direccion.getUbn_mus_place_id()+" ya existe\"}";
         return ret;
     }

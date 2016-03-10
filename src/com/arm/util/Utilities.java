@@ -14,7 +14,8 @@ public class Utilities {
         String path = "web/docs/";
         FileWriter fw = null;
         PrintWriter pw = null;
-        name = name.replaceAll(" ", "").replaceAll("\"", "");
+        name = name.toLowerCase().replaceAll(" ", "").replaceAll("\"", "").replaceAll("\\|", "")
+                .replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u");
         try{
             if( !new File( path+name ).exists() ) {
                 fw = new FileWriter(path+name);

@@ -9,20 +9,19 @@ import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
 import net.minidev.json.JSONArray;
 
-
 /**
  * Created by ACsatillo on 11/02/2016.
  */
-
 public class MuseosCDMX {
 
     private static String key = "AIzaSyBXkD485Luv8zOVWRVTGXFv0eLGsBNtQhQ";
     /** Radar URL **/
     //https://maps.googleapis.com/maps/api/place/radarsearch/json?location=19.4417788,-99.2036764&radius=25000&types=museum&key=
-    private static String urlPlaces = "http://localhost/museums/places.json";
+    private static String urlPlaces = "https://maps.googleapis.com/maps/api/place/radarsearch/json?location=19.447880,-99.152853&radius=25000&types=museum&key="+key;
     /** Place Detail **/
     //https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJScjIILQB0oURJMVub-MaI4Q&key=
     private static String urlPlaceById = "https://maps.googleapis.com/maps/api/place/details/json?key="+key+"&language=es&placeid=";
+    //private static String urlPlaceById = "http://localhost/museums/docs/ChIJw_w-OTP50YURNf4xcyDBE3M_-_MuseoTutankam%C3%B3n-Mexico.json";
 
     public static void main(String[] args){
         String json = WSConsumer.consumeURL(urlPlaces);
@@ -52,13 +51,13 @@ public class MuseosCDMX {
                                                 getString(jsid, "$result.geometry.location.lng"), //longitud
                                                 getString(jsid, "$result.formatted_address"), //direccion
                                                 getString(jsid, "$result.vicinity"), //vicinity
-                                                getString(jsid, "$result.address_components.[0].long_name"), //calle
-                                                getString(jsid, "$result.address_components.[1].long_name"), //colonia
-                                                getString(jsid, "$result.address_components.[2].long_name"), //delegacion
-                                                getString(jsid, "$result.address_components.[3].long_name"), //ciudad
-                                                getString(jsid, "$result.address_components.[4].long_name"), //estado
-                                                getString(jsid, "$result.address_components.[5].long_name"), //pais
-                                                getString(jsid, "$result.address_components.[6].long_name"), //cp
+                                                getAddressComponent(jsid, "route"), //calle
+                                                getAddressComponent(jsid, "neighborhood"), //colonia
+                                                getAddressComponent(jsid, "administrative_area_level_3"), //delegacion
+                                                getAddressComponent(jsid, "locality"), //ciudad
+                                                getAddressComponent(jsid, "administrative_area_level_1"), //estado
+                                                getAddressComponent(jsid, "country"), //pais
+                                                getAddressComponent(jsid, "postal_code"), //cp
                                                 getString(jsid, "$result.url")  //maps_url
                                         )
                                 );
@@ -76,7 +75,13 @@ public class MuseosCDMX {
                             System.out.println( mc.save() );
                             mc.close();
 
-                        } else System.err.println("No se encontro lugar con id : " + id + "\nUrl : " + urlPlaceById);
+                        } else {
+                            String status = getString(jsid, "$.status");
+                            if( status.equals("OVER_QUERY_LIMIT") ){
+                                System.err.println("Llego al limite de querys en WS");
+                                System.exit(0);
+                            } else System.err.println("No se encontro lugar con Url : " + urlPlaceById + id);
+                        }
                     } else System.err.println("Algo raro en id : " + id);
                 }
             } else System.err.println("No se encontro resultados con : " + urlPlaces);
@@ -89,13 +94,40 @@ public class MuseosCDMX {
             ret = JsonPath.read(json, path).toString();
         } catch (PathNotFoundException e){
             ret = "";
-            //System.err.println("PathNotFoundException : " + path);
-            System.err.println("Error : " + path);
+            if(!path.contains("opening_hours") && !path.contains("address_components"))
+                System.err.println("Error : " + path);
         } catch (NullPointerException nul){
             ret = "";
-            //System.err.println("Null : " + nul.getLocalizedMessage());
         }
         return ret;
+    }
+
+    /**
+     * calle		route
+     * colonia		neighborhood
+     * delegacion	sublocality_level_1/administrative_area_level_3
+     * ciudad		locality
+     * estado		administrative_area_level_1
+     * pais	        country
+     * cp			postal_code
+     */
+    protected static String getAddressComponent(String json, String component){
+        String comp = "";
+        JSONArray ja = null;
+        try{
+            ja = JsonPath.read(json, "$result.address_components");
+            for( Object j: ja ){
+                if( JsonPath.read(j, "$.types")!=null && JsonPath.read(j, "$.types").toString().contains(component) ){
+                    comp = JsonPath.read(j, "$.long_name");
+                }
+            }
+        } catch (PathNotFoundException | NullPointerException e){
+            comp = "";
+        } catch (Exception e){
+            comp = "";
+            System.err.println("========= No existe adress component ========");
+        }
+        return comp;
     }
 
 }
